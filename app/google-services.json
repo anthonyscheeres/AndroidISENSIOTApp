@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "289020988345",
+    "firebase_url": "https://isensiot.firebaseio.com",
+    "project_id": "isensiot",
+    "storage_bucket": "isensiot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289020988345:android:a7fc51205ae6aec7d70468",
+        "android_client_info": {
+          "package_name": "com.example.isensiotapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289020988345-i4a57o85c3v7cenvdbev6s84gfunu0hl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBuq4hxfRrH88KzqvN4irU7YkUYnZV-0Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289020988345-i4a57o85c3v7cenvdbev6s84gfunu0hl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
