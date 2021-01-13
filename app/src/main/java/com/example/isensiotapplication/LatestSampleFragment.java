@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Date;
+
 
 public class LatestSampleFragment extends Fragment {
 
@@ -30,13 +32,6 @@ public class LatestSampleFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-
-
-
-        //myRef.setValue(new Interval( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS"), 80, true, true, 200));
-
         // Read from the database
         Data.myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -44,50 +39,43 @@ public class LatestSampleFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 IntervalCollection intervals = dataSnapshot.getValue(IntervalCollection.class);
-
-
-                    updateTextForPlant(intervals);
-
-
-
+                Interval latestSample = null;
+                //get latest sample from collection
+                if ( intervals!=null) {
+                    latestSample = intervals.intervals.get(-1);
+                }
+                    updateTextForPlant(latestSample);
             }
-
-
-
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
 
             }
         });
-
-
-
-
     }
-    public void updateTextForPlant(IntervalCollection collection){
+    public void updateTextForPlant(Interval latestSample){
 
         View view = getView();
 
         TextView text = (TextView) view.findViewById(R.id.textView2);
         TextView text2 = (TextView) view.findViewById(R.id.textView3);
         TextView text3 = (TextView) view.findViewById(R.id.textView4);
-        if (collection==null) {
+        if (latestSample==null) {
             text.setText("Geen plant data");
             return;
         }
-        //get latest sample from collection
-        Interval latestSample = collection.intervals.get(-1);
+
         if(latestSample.moistureSensorIsMoist){
             text.setText("De plant is goed bewaterd");
         }
+        else  text.setText("De plant is niet goed bewaterd");
 
         if (latestSample.laserLengthReached){
-            text2.setText("De plant is langer geworden dan:"+latestSample.laserLengthInMm + "milimeter");
+            text2.setText("De plant is langer geworden dan: "+latestSample.laserLengthInMm + " milimeter");
         }
+        else  text2.setText("De plant is nog niet langer geworden dan: "+latestSample.laserLengthInMm + " milimeter");
 
-text3.setText("De plant krijgt genoeg licht");
+        text3.setText("De plant krijgt genoeg licht");
 
 
     }

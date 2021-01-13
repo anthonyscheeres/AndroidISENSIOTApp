@@ -104,18 +104,7 @@ public class HomeGraphFragment extends Fragment {
                 counter++;
             }
         }
-
-
-        else {
-            entries.add(new BarEntry(0f, 30f));
-            entries.add(new BarEntry(1f, 80f));
-            entries.add(new BarEntry(2f, 60f));
-            entries.add(new BarEntry(3f, 50f));   // gap of 2f
-            entries.add(new BarEntry(5f, 70f));
-            entries.add(new BarEntry(6f, 60f));
-        }
-
-
+        else chart.setNoDataText("Geen data");
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
         chart.setData(data);
