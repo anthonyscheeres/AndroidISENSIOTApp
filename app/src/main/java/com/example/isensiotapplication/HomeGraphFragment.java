@@ -19,6 +19,9 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,20 +40,47 @@ public class HomeGraphFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View view = getView();
 
-        makeTheBarChart(view);
+
+        makeTheBarChart();
 
     }
-    public void makeTheBarChart(View view) {
+    public void makeTheBarChart() {
+
+        // Read from the database
+        Data.myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                IntervalCollection intervals = dataSnapshot.getValue(IntervalCollection.class);
 
 
+                if (intervals!=null) {
 
+                    Data.intervals = intervals.intervals;
+                    updateGraph(intervals);
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+
+        });
+
+
+    }
+    private void updateGraph(IntervalCollection intervals){
+        View view = getView();
         BarChart chart = (BarChart) view.findViewById(R.id.barchart);
 
         List<BarEntry> entries = new ArrayList<>();
-
-        List<Interval> collection =  Data.intervals;
+        List<Interval> collection = intervals.intervals;
 
         int dry = 0;
 
@@ -76,7 +106,7 @@ public class HomeGraphFragment extends Fragment {
         }
 
 
-else {
+        else {
             entries.add(new BarEntry(0f, 30f));
             entries.add(new BarEntry(1f, 80f));
             entries.add(new BarEntry(2f, 60f));
@@ -93,6 +123,4 @@ else {
         chart.animateXY(Y, 2);
         chart.invalidate();
     }
-
-
 }
