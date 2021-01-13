@@ -7,22 +7,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.isensiotapplication.service.models.Data;
 import com.example.isensiotapplication.service.models.Interval;
-import com.example.isensiotapplication.service.models.IntervalCollection;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +63,6 @@ public class HomeGraphFragment extends Fragment {
 
         int counter = 0;
 
-
         if(intervals!=null){
 
             List<Interval> collection = intervals;
@@ -81,8 +76,8 @@ public class HomeGraphFragment extends Fragment {
                     dry++;
                 }
 
-                entries.add(new BarEntry(dry, 1f));
-                entries.add(new BarEntry(wet, 2f));
+                entries.add(new BarEntry(1f , dry));
+                entries.add(new BarEntry(2f, wet));
                 counter++;
             }
         }
