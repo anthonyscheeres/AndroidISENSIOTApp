@@ -22,11 +22,7 @@ import java.util.Date;
 
 
 public class LatestSampleFragment extends Fragment {
-    View view = getView();
-    TextView text = (TextView) view.findViewById(R.id.textView2);
-    TextView text2 = (TextView) view.findViewById(R.id.textView3);
-    TextView text3 = (TextView) view.findViewById(R.id.textView4);
-    Interval latestSample = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,8 +40,12 @@ public class LatestSampleFragment extends Fragment {
                 // whenever data at this location is updated.
                 IntervalCollection intervals = dataSnapshot.getValue(IntervalCollection.class);
 
+
+
+                Interval latestSample = null;
                 //get latest sample from collection
                 if ( intervals!=null) {
+                    Data.intervals = intervals.intervals;
                     latestSample = intervals.intervals.get(-1);
                 }
                     updateTextForPlant(latestSample);
@@ -58,6 +58,10 @@ public class LatestSampleFragment extends Fragment {
         });
     }
     public void updateTextForPlant(Interval latestSample){
+        View view = getView();
+        TextView text = (TextView) view.findViewById(R.id.textView2);
+        TextView text2 = (TextView) view.findViewById(R.id.textView3);
+        TextView text3 = (TextView) view.findViewById(R.id.textView4);
         if (latestSample==null) {
             text.setText("Geen plant data");
             return;

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,40 +48,18 @@ public class HomeGraphFragment extends Fragment {
     }
     public void makeTheBarChart() {
 
-        // Read from the database
-        Data.myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                IntervalCollection intervals = dataSnapshot.getValue(IntervalCollection.class);
 
-
-                if (intervals!=null) {
-
-                    Data.intervals = intervals.intervals;
-                    updateGraph(intervals);
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-
-        });
+                    updateGraph(Data.intervals);
 
 
     }
-    private void updateGraph(IntervalCollection intervals){
+    private void updateGraph(List<Interval> intervals){
+
         View view = getView();
         BarChart chart = (BarChart) view.findViewById(R.id.barchart);
-
+        chart.getDescription().setEnabled(false);
         List<BarEntry> entries = new ArrayList<>();
-        List<Interval> collection = intervals.intervals;
+        chart.setNoDataText("Geen data");
 
         int dry = 0;
 
@@ -88,7 +67,10 @@ public class HomeGraphFragment extends Fragment {
 
         int counter = 0;
 
-        if(collection !=null){
+
+        if(intervals!=null){
+
+            List<Interval> collection = intervals;
             for (Interval interval : collection) {
                 if (counter >= Y) {
                     break;
@@ -104,7 +86,6 @@ public class HomeGraphFragment extends Fragment {
                 counter++;
             }
         }
-        else chart.setNoDataText("Geen data");
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
         chart.setData(data);
