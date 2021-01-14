@@ -56,6 +56,7 @@ public class HomeGraphFragment extends Fragment {
         BarChart chart = (BarChart) view.findViewById(R.id.barchart);
         chart.getDescription().setEnabled(false);
         List<BarEntry> entries = new ArrayList<>();
+        BarDataSet set = new BarDataSet(entries, "Geen plant data");
         chart.setNoDataText("Geen data");
         TextView text = view.findViewById(R.id.textView7);
         int dry = 0;
@@ -65,7 +66,7 @@ public class HomeGraphFragment extends Fragment {
         int counter = 0;
 
         if(intervals!=null){
-
+            set = new BarDataSet(entries, "De plant was "+wet+" keer goed bewaterd, " +dry+ " niet goed bewaterd");
             List<Interval> collection = intervals;
             for (Interval interval : collection) {
                 if (counter >= Y) {
@@ -77,14 +78,13 @@ public class HomeGraphFragment extends Fragment {
                     dry++;
                 }
 
-                text.setText("De plant was "+wet+" keer goed bewaterd, " +dry+ " niet goed bewaterd");
                 entries.add(new BarEntry(1f , dry));
                 entries.add(new BarEntry(2f, wet));
                 counter++;
             }
         }
         else {  text.setText("De plant heeft nog geen data");}
-        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+
         BarData data = new BarData(set);
         chart.setData(data);
         chart.setDescription(new Description( ));
