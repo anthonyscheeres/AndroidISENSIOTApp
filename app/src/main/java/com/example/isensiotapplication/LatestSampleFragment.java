@@ -39,9 +39,6 @@ public class LatestSampleFragment extends Fragment {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 IntervalCollection intervals = dataSnapshot.getValue(IntervalCollection.class);
-
-
-
                 Interval latestSample = null;
                 //get latest sample from collection
                 if ( intervals!=null) {

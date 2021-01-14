@@ -6,11 +6,16 @@
     tools:context=".HomeGraphFragment">
 
 
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barchart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="554dp">
 
     </com.github.mikephil.charting.charts.BarChart>
 </FrameLayout>

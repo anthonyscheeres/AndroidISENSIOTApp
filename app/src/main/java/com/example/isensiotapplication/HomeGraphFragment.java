@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.isensiotapplication.service.models.Data;
 import com.example.isensiotapplication.service.models.Interval;
@@ -56,7 +57,7 @@ public class HomeGraphFragment extends Fragment {
         chart.getDescription().setEnabled(false);
         List<BarEntry> entries = new ArrayList<>();
         chart.setNoDataText("Geen data");
-
+        TextView text = view.findViewById(R.id.textView7);
         int dry = 0;
 
         int wet = 0;
@@ -76,11 +77,13 @@ public class HomeGraphFragment extends Fragment {
                     dry++;
                 }
 
+                text.setText("De plant was "+wet+" keer goed bewaterd, " +dry+ " niet goed bewaterd");
                 entries.add(new BarEntry(1f , dry));
                 entries.add(new BarEntry(2f, wet));
                 counter++;
             }
         }
+        else {  text.setText("De plant heeft nog geen data");}
         BarDataSet set = new BarDataSet(entries, "BarDataSet");
         BarData data = new BarData(set);
         chart.setData(data);
