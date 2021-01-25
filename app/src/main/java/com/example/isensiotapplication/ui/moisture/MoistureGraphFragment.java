@@ -20,6 +20,9 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,8 @@ public class MoistureGraphFragment extends Fragment {
     final int Y = 100;
     public int dry = 0;
     public int wet = 0;
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -44,10 +49,41 @@ public class MoistureGraphFragment extends Fragment {
 
     }
 
+    private List<Interval> fetchData(DataSnapshot dataSnapshot)
+    {
+        List<Interval> collection = new ArrayList<Interval>();
+
+        for(DataSnapshot postSnapShot:dataSnapshot.getChildren())
+        {
+            Interval day= postSnapShot.getValue(Interval.class);
+            collection.add(day);
+        }
+        return collection;
+    }
+
     public void makeTheBarChart() {
 
+        List<Interval> collection = new ArrayList<Interval>();
 
-        updateGraph(Data.intervals);
+
+        Data.myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                List<Interval> collection= fetchData(dataSnapshot);
+
+                updateGraph(collection);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
+
 
 
     }
