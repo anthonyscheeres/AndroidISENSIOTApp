@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +17,9 @@ import com.example.isensiotapplication.service.models.IntervalCollection;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeLatestSampleFragment extends Fragment {
@@ -35,24 +39,21 @@ public class HomeLatestSampleFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Read from the database
-        Data.myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
+        makeTheBarChart();
 
-                Interval latestSample = dataSnapshot.getValue(Interval.class);
 
-                updateTextForPlant(latestSample);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-
-            }
-        });
     }
+
+    private List<Interval> fetchData(DataSnapshot dataSnapshot) {
+        List<Interval> collection = new ArrayList<Interval>();
+
+        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+            Interval day = postSnapShot.getValue(Interval.class);
+            collection.add(day);
+        }
+        return collection;
+    }
+
 
     public void updateTextForPlant(Interval latestSample) {
         View view = getView();
@@ -70,6 +71,34 @@ public class HomeLatestSampleFragment extends Fragment {
             isLongerThanGivenAmount.setText("De plant is langer geworden dan: " + latestSample.laserLengthInMm + " milimeter");
         } else
             isLongerThanGivenAmount.setText("De plant is nog niet langer geworden dan: " + latestSample.laserLengthInMm + " milimeter");
-        isWellLid.setText("De plant krijgt genoeg licht");
+
+        isWellLid.setText("De plant krijgt " + latestSample.lightSensorLuxValue + " Lux aan licht");
+    }
+
+    public void makeTheBarChart() {
+
+        List<Interval> collection = new ArrayList<Interval>();
+
+
+        Data.myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                List<Interval> collection = fetchData(dataSnapshot);
+                Interval value = null;
+                if (collection.size() > 0) {
+                    value = collection.get(collection.size() - 1);
+
+                }
+                updateTextForPlant(value);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
